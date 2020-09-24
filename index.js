@@ -1,96 +1,117 @@
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
+
 const inquirer = require("inquirer");
-const path = require("path");
-const fs = require("fs");
+const mysql = require("mysql");
+var connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "root",
+    database: "employeeDB"
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+})
+connection.connect(function (error) {
+    if (error) {
+        throw error;
+    }
+    console.log("Database connection established. Welcome to the HR system.")
+    console.log("----------------------------------------------------------------------------------------------------")
+    displayMenu()
+})
 
-const render = require("./lib/htmlRender");
-var employeeDirectory = []
 
-// const util = require('util');
+
 
 // Prompt the user with questions
 
 
-      
+
 function displayMenu() {
     inquirer.prompt([
         {
             type: "list",
             message: "What would you like to do today?",
             name: "userInput",
-            choices: ["Add employee", "View all employees", "Remove employee", "exit application"]
+            choices: ["View Department", "View Role", "View all employees", "Update Employee Role", "Add department", "Add Role", "Add Employee", "exit application"]
 
         }
     ])
         .then(function (response) {
             switch (response.userInput) {
-                case "Add employee":
-                    addemployee()
+                case "View Department":
+                    viewDepartment()
+                    break;
+                case "View Role":
+                    viewRole()
                     break;
                 case "View all employees":
-                    viewAllEmp()
+                    ViewAllEmployees()
                     break;
-                case  "Remove employee":
-                    removeEmp()
+                case "Update Employee Role":
+                    updateEmployeeRole()
+                    break;
+                case "Add department":
+                    AddDepartment()
+                    break;
+                case "Add Role":
+                    AddRole()
+                    break;
+                case "Add Employee":
+                    AddEmployee()
                     break;
                 default:
-                    exitapp()
-            }
+                    connection.end()
+                    process.exit(0)
+}
         }    )
     }
 
 
-    function addemployee(){
-        inquirer
+function addemployee() {
+    inquirer
         .prompt([
             {
                 type: "input",
                 message: "What is your employee's first name?",
                 name: "Name"
                 // console.log(response.Name)
-    
+
             },
             {
                 type: "input",
                 message: "What is your employee's last name?",
                 name: "LastName"
                 // console.log(response.LastName)
-    
+
             },
             {
                 type: "input",
                 message: "What is your employee's ID?",
                 name: "ID"
                 // console.log(response.ID)
-    
+
             },
             {
                 type: "input",
                 message: "What is your employee's role?",
                 name: "Role"
                 // console.log(response.Role)
-    
-        
+
+
             },
             {
                 type: "input",
                 message: "Who is your employee's manager?",
                 name: "Manager"
                 // console.log(response.Manager)
-    
+
             }
         ])
 
-    .then(function (response) {
-        var newEmployee = new Employee(response.Name, response.LastName, response.ID,response.Role,response.Manager)
-        employeeDB.push(newEmployee)
-        displayMenu()
-    })
+        .then(function (response) {
+            var newEmployee = new Employee(response.Name, response.LastName, response.ID, response.Role, response.Manager)
+            employeeDB.push(newEmployee)
+            displayMenu()
+        })
 }
 // ===========================================================================================================================
 // function addintern(){
@@ -116,7 +137,7 @@ function displayMenu() {
 //             name: "Email"
 //             // console.log(response.Email)
 
-    
+
 //         },
 //         {
 //             type: "input",
@@ -156,7 +177,7 @@ function displayMenu() {
 //             name: "Email"
 //             // console.log(response.Email)
 
-    
+
 //         },
 //         {
 //             type: "input",
