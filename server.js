@@ -108,7 +108,7 @@ function AddEmployee() {
         type: "input",
         message: "What is your employee's manager role ID?",
         name: "manager_id",
-        choices: [1, 2, 3, 4, null]
+        choices: [1, 2, 3, 4,]
 
 
       },
