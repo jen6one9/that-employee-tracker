@@ -12,9 +12,6 @@ var PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
-
 var connection = mysql.createConnection({
   host: "Localhost",
   port: 3306,
@@ -22,10 +19,6 @@ var connection = mysql.createConnection({
   password: "root",
   database: "employeeDB"
 });
-
-
-
-
 
 
 connection.connect(function (err) {
@@ -37,20 +30,10 @@ connection.connect(function (err) {
   console.log("connected as id " + connection.threadId);
 });
 
-mainMenu();
 
-
-
-connection.connect(function (error) {
-  if (error) {
-    throw error;
-  }
   console.log("Database connection established. Welcome to the HR system.")
   console.log("----------------------------------------------------------------------------------------------------")
   displayMenu()
-})
-
-
 
 
 // Prompt the user with questions
