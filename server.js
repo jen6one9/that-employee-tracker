@@ -31,7 +31,7 @@ connection.connect(function (err) {
 });
 
 
-  console.log("Database connection established. Welcome to the HR system.")
+  console.log("Database connection established. Welcome to the HR system - also known as ::That Employee Tracker::")
   console.log("----------------------------------------------------------------------------------------------------")
   displayMenu()
 
@@ -141,7 +141,7 @@ function viewDepartment() {
 }
 
 function viewRole() {
-  console.log("Loading roles...\n");
+  console.log("Loading role...\n");
   connection.query("SELECT * FROM role", function (error, records) {
       if (err) throw err;
       // Log all results of the SELECT statement
