@@ -31,7 +31,7 @@ function displayMenu() {
             type: "list",
             message: "What would you like to do today?",
             name: "userInput",
-            choices: ["View Department", "View Role", "View all employees", "Update Employee Role", "Add department", "Add Role", "Add Employee", "exit application"]
+            choices: ["View Department", "View Role", "View All Employees", "Update Employee Role", "Add Department", "Add Role", "Add Employee", "Exit application"]
 
         }
     ])
@@ -43,13 +43,13 @@ function displayMenu() {
                 case "View Role":
                     viewRole()
                     break;
-                case "View all employees":
+                case "View All Employees":
                     ViewAllEmployees()
                     break;
                 case "Update Employee Role":
                     updateEmployeeRole()
                     break;
-                case "Add department":
+                case "Add Department":
                     AddDepartment()
                     break;
                 case "Add Role":
@@ -61,146 +61,68 @@ function displayMenu() {
                 default:
                     connection.end()
                     process.exit(0)
+            }
+        })
 }
-        }    )
-    }
 
 
-function addemployee() {
+function AddEmployee() {
     inquirer
         .prompt([
             {
                 type: "input",
                 message: "What is your employee's first name?",
-                name: "Name"
-                // console.log(response.Name)
+                name: "first_name"
+
 
             },
             {
                 type: "input",
                 message: "What is your employee's last name?",
-                name: "LastName"
-                // console.log(response.LastName)
+                name: "last_name"
+
 
             },
             {
-                type: "input",
-                message: "What is your employee's ID?",
-                name: "ID"
-                // console.log(response.ID)
-
-            },
-            {
-                type: "input",
-                message: "What is your employee's role?",
-                name: "Role"
-                // console.log(response.Role)
+                type: "list",
+                message: "What is your employee's role ID?",
+                name: "role_id",
+                choices: [1, 2, 3, 4, 5, 6, 7, 8]
 
 
             },
             {
                 type: "input",
-                message: "Who is your employee's manager?",
-                name: "Manager"
-                // console.log(response.Manager)
+                message: "What is your employee's manager role ID?",
+                name: "manager_id",
+                choices: [1, 2, 3, 4, null]
 
-            }
+
+            },
+
         ])
-
         .then(function (response) {
-            var newEmployee = new Employee(response.Name, response.LastName, response.ID, response.Role, response.Manager)
-            employeeDB.push(newEmployee)
-            displayMenu()
-        })
+            connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?);",
+                [response.first_name, response.last_name, response.role_id, response.manager_id], function(error,records){
+                    if(error) throw error;
+                    console.table(records)
+                    displayMenu()
+                })
+            })
+
+     
 }
-// ===========================================================================================================================
-// function addintern(){
-//     inquirer
-//     .prompt([
-//         {
-//             type: "input",
-//             message: "What is your name?",
-//             name: "Name"
-//             // console.log(response.Name)
-
-//         },
-//         {
-//             type: "input",
-//             message: "What is your ID?",
-//             name: "ID"
-//             // console.log(response.ID)
-
-//         },
-//         {
-//             type: "input",
-//             message: "What is your email address?",
-//             name: "Email"
-//             // console.log(response.Email)
-
-
-//         },
-//         {
-//             type: "input",
-//             message: "What school did you graduate from?",
-//             name: "School"
-//             // console.log(response.School)
-
-//         }
-//     ])
-
-// .then(function (response) {
-//     var newIntern = new Intern(response.Name, response.ID,response.Email,response.School)
-//     employeeDirectory.push(newIntern)
-//     displayMenu()
-// })
-// }
-// function addengineer(){
-//     inquirer
-//     .prompt([
-//         {
-//             type: "input",
-//             message: "What is your name?",
-//             name: "Name"
-//             // console.log(response.Name)
-
-//         },
-//         {
-//             type: "input",
-//             message: "What is your ID?",
-//             name: "ID"
-//             // console.log(response.ID)
-
-//         },
-//         {
-//             type: "input",
-//             message: "What is your email address?",
-//             name: "Email"
-//             // console.log(response.Email)
-
-
-//         },
-//         {
-//             type: "input",
-//             message: "What is your official Github?",
-//             name: "GitHub"
-//             // console.log(response.GitHub)
-
-//         }
-//     ])
-
-
-// .then(function (response) {
-//     var newEngineer = new Engineer(response.Name, response.ID,response.Email,response.GitHub)
-//     employeeDirectory.push(newEngineer)
-//     displayMenu()
-// })
-// }
-// function exitapp(){
-//     console.log(employeeDirectory);
-//     var html = render(employeeDirectory);
-//     console.log(html);
-//     fs.writeFileSync ("./index.html", html, function(){
-//         console.log("html generator")
-//     })
-// }
-// displayMenu()
+function ViewAllEmployees(){
+    connection.query("select * from employee;", function(error,records){
+        if(error) throw error;
+        console.table(records)
+        displayMenu()
+    })
+}
+function viewDepartment(){
+    connection.query("select * from department;", function(error,records){
+        if(error) throw error;
+        console.table(records)
+        displayMenu()
+    })
+}
